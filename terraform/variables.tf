@@ -13,6 +13,12 @@ variable "user_name" {
 variable "password" {
   default = "wxC11102"
 }
+variable "ip_address" {
+  default = "10.205.10.3/24"
+}
+variable "ip_gw" {
+  default = "10.205.10.1"
+}
 variable "template_id" {
   default = "2000"
 }
@@ -24,4 +30,7 @@ variable "datastore_id" {
 }
 variable "template_disk_size" {
   default = 10 # en GigaOctets imposée par le template (8 par défaut)
+}
+variable "ansible-playbook" {
+  default = "playbook.yml"
 }

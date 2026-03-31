@@ -1,7 +1,3 @@
-	data "local_file" "ssh_public_key" {
-	  filename = var.ssh_file
-	}
-
 	provider "proxmox" {
 		insecure = true # Required for self-signed certificates
 	}
@@ -29,18 +25,18 @@
 	  
 	  	ip_config {
 	  	  ipv4 {
-	  		address = "10.205.10.10/24"
-	  		gateway = "10.205.10.1"
+	  		address = var.ip_address
+	  		gateway = var.ip_gw
 	  	  }
 	  	}
 	  
 	  	user_account {
 	  	  username = var.user_name
-	  	  password = var.password
+	  	  keys     = [trimspace(file(var.ssh_file))]
 	  	}
 	  }
 	  
 	  provisioner "local-exec" {
-	  	command = "sleep 30 && ansible-playbook -i 10.205.10.3, -u honey playbook.yml"
+	  	command = "sleep 130 && var.ansible-playbook -i 10.205.10.3, -u honey playbook.yml"
 	  }
 	}
