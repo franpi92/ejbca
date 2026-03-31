@@ -2,12 +2,11 @@
 	  required_providers {
 	    proxmox = {
 	      source  = "bpg/proxmox"
-	      version = "0.66.1" # Version compatible Proxmox 8.x
+	      version = ">= 0.68.0"
+	    }
+	    local = {
+	      source  = "hashicorp/local"
+	      version = "~> 2.3"
 	    }
 	  }
 	}
-
-
-provider "proxmox" {
-  insecure  = true
-}

@@ -1,42 +1,46 @@
-	resource "proxmox_virtual_machine" "ubuntu_server" {
-	  name        = "ejbca_ubu24"
-	  description = "Managed by Terraform"
-	  node_name   = "proxmox17"
-	  vm_id       = 2001 # Un ID libre
-	
-	  clone {
-	    vm_id = 2000 # Votre template ID
+	data "local_file" "ssh_public_key" {
+	  filename = var.ssh_file
+	}
+
+	provider "proxmox" {
+		insecure = true # Required for self-signed certificates
+	}
+
+	resource "proxmox_virtual_environment_vm" "ubu24_vm" {
+	  node_name = var.endpoint_node
+	  name      = var.clone_node
+	  vm_id     = var.clone_id
+	  disk {
+		datastore_id = var.datastore_id
+    size		     = var.template_disk_size
+		interface    = "scsi0"
 	  }
-	
+
+	  clone {vm_id = var.template_id}
+      cpu {
+		cores = 2
+		type  = "host"
+	  }
+	  memory         {dedicated = 4096}
+	  network_device {bridge    = "vmbr0"}
+	  
 	  initialization {
-	    ip_config {
-	      ipv4 {
-	        address = "10.205.10.10/24"
-	        gateway = "10.205.10.1"
-	      }
-	    }
-	
-	    user_account {
-	      username = "honey"
-	      password = "wxC11102" # Note: Il est recommandé d'utiliser des hash en prod
-	    }
+	  	datastore_id = var.datastore_id # OBLIGATOIRE avec le provider BPG
+	  
+	  	ip_config {
+	  	  ipv4 {
+	  		address = "10.205.10.10/24"
+	  		gateway = "10.205.10.1"
+	  	  }
+	  	}
+	  
+	  	user_account {
+	  	  username = var.user_name
+	  	  password = var.password
+	  	}
 	  }
-	
-	  network_device {
-	    bridge = "vmbr0"
-	  }
-	
-	  cpu {
-	    cores = 2
-	  }
-	
-	  memory {
-	    dedicated = 4096
-	  }
-	
-	
-	  # Déclenche Ansible après la création
+	  
 	  provisioner "local-exec" {
-	    command = "ansible-playbook -i 10.205.10.3, -u honey --private-key /home/larbin/.ssh/tf_ssh playbook.yml"
+	  	command = "sleep 30 && ansible-playbook -i 10.205.10.3, -u honey playbook.yml"
 	  }
 	}

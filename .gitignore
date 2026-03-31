@@ -9,6 +9,7 @@
 **/homelab_network_diagram*
 **/openrc.sh
 **/terraform.*
+**/variables.tf
 **/venv
 create_ubuntu24.sh
 kubeconfig

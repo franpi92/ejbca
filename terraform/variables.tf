@@ -1,13 +1,27 @@
-variable "username" {
+variable "ssh_file" {
+  default =  "/home/larbin/.ssh/tf_ssh.pub"
+}
+variable "endpoint_node" {
+  default =  "proxmoxf17"
+}
+variable "clone_node" {
+  default =  "ejbca-ubu24"
+}
+variable "user_name" {
   default = "honey"
 }
 variable "password" {
   default = "wxC11102"
 }
-variable "target_node" {
-  default =  "proxmoxf17"
+variable "template_id" {
+  default = "2000"
 }
-variable "ssh_key" {
-  default =  "ssh-rsa AAAAC3NzaC1lZDI1NTE5AAAAIFiYQpN2HdWXeEmHrSovKCmEcxuDTDOGgMRclBRH3N/x larbin@hub"
+variable "clone_id" {
+  default = "2001"
 }
-
+variable "datastore_id" {
+  default = "local"
+}
+variable "template_disk_size" {
+  default = 10 # en GigaOctets imposée par le template (8 par défaut)
+}
