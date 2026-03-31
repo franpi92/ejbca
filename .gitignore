@@ -10,8 +10,9 @@
 **/openrc.sh
 **/terraform.*
 **/venv
-talosconfig
+create_ubuntu24.sh
 kubeconfig
+talosconfig
 **/*.lnk
 **/*.log
 **/*.md.swp
