@@ -1,10 +1,15 @@
-    - name: Installer Docker et EJBCA
-      hosts: all
-      become: yes
-      tasks:
+- name: Installer Docker et EJBCA
+  hosts: all
+  become: yes
+  tasks:
     - name: Installation des dépendances Docker
       apt:
-        name: [apt-transport-https, ca-certificates, curl, software-properties-common, gnupg]
+        name: 
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - gnupg
         update_cache: yes
 
     - name: Ajout de la clé GPG Docker
@@ -14,12 +19,16 @@
 
     - name: Ajout du dépôt Docker
       apt_repository:
-        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu noble stable
+        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu noble stable"
         state: present
 
     - name: Installation de Docker Engine
       apt:
-        name: [docker-ce, docker-ce-cli, containerd.io, docker-compose-plugin]
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-compose-plugin
         update_cache: yes
 
     - name: Lancement du conteneur EJBCA Community
@@ -32,14 +41,18 @@
           - "80:8080"
           - "443:8443"
         env:
-          # Configuration de la clé superadmin à 2048 bits
+        # Configuration de la DB
           DATABASE_JDBC_URL: "jdbc:h2:/opt/primekey/ejbca/p12/ejbcadb;DB_CLOSE_DELAY=-1"
-          # Commande spécifique pour forcer la taille de clé à l'initialisation
           INITIAL_ADMIN_KEY_SPEC: "2048"
-
+          # Paramètres d'auto-configuration pour générer le .p12
+          NSH_AUTO_CONFIGURE: "true"
+          INITIAL_ADMIN_USER: "superadmin"
+          INITIAL_ADMIN_PASSWORD: "password"
+          INITIAL_CA_NAME: "ManagementCA"
+       
     - name: Attendre l'initialisation (génération des certificats)
       pause:
-        seconds: 30
+        seconds: 50
 
     - name: Récupérer le certificat superadmin.p12 sur l'hôte
-      shell: "docker cp ejbca:/opt/primekey/ejbca/p12/superadmin.p12 /home/honey/superadmin.p12"
+      shell: "docker cp ejbca:/opt/keyfactor/p12/superadmin.p12 /home/honey/superadmin.p12"
