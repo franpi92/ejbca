@@ -1,7 +1,7 @@
-	- name: Installer Docker et EJBCA
-  hosts: all
-  become: yes
-  tasks:
+    - name: Installer Docker et EJBCA
+      hosts: all
+      become: yes
+      tasks:
     - name: Installation des dépendances Docker
       apt:
         name: [apt-transport-https, ca-certificates, curl, software-properties-common, gnupg]

@@ -23,7 +23,7 @@
 	  	bridge    = "vmbr0"
 	  	vlan_id   = var.vlan_id
 	  }
-	  agent          {enabled = true}
+	  agent          {enabled = false}
 
 	  initialization {
 	  	datastore_id = var.datastore_id # OBLIGATOIRE avec le provider BPG

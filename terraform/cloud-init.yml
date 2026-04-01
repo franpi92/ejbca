@@ -19,13 +19,12 @@ users:
 ssh_pwauth: true
 disable_root: true
 
-# Dans votre template_file user_data
-packages:
-  - qemu-guest-agent
+#packages:
+#  - qemu-guest-agent
 
-runcmd:
-  - systemctl enable qemu-guest-agent
-  - systemctl start qemu-guest-agent
+#runcmd:
+#  - systemctl enable qemu-guest-agent
+#  - systemctl start qemu-guest-agent
 # Forcer la mise à jour de la config SSH par cloud-init
 # runcmd:
 #   - sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config.d/50-cloud-init.conf
