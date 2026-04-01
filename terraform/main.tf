@@ -6,9 +6,10 @@
 	  node_name = var.endpoint_node
 	  name      = var.clone_node
 	  vm_id     = var.clone_id
+	  
 	  disk {
 		datastore_id = var.datastore_id
-    size		     = var.template_disk_size
+    	size	     = var.template_disk_size
 		interface    = "scsi0"
 	  }
 
@@ -18,8 +19,12 @@
 		type  = "host"
 	  }
 	  memory         {dedicated = 4096}
-	  network_device {bridge    = "vmbr0"}
-	  
+	  network_device {
+	  	bridge    = "vmbr0"
+	  	vlan_id   = var.vlan_id
+	  }
+	  agent          {enabled = true}
+
 	  initialization {
 	  	datastore_id = var.datastore_id # OBLIGATOIRE avec le provider BPG
 	  
@@ -28,6 +33,7 @@
 	  		address = var.ip_address
 	  		gateway = var.ip_gw
 	  	  }
+		  
 	  	}
 	  
 	  	user_account {
@@ -37,6 +43,6 @@
 	  }
 	  
 	  provisioner "local-exec" {
-	  	command = "sleep 130 && var.ansible-playbook -i 10.205.10.3, -u honey playbook.yml"
+		command = "sleep 300 && ansible-playbook -i ${var.ip_address}, -u ${var.user_name} ${var.ansible_playbook}"
 	  }
 	}
